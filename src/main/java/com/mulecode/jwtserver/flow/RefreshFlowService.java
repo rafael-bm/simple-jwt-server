@@ -2,6 +2,7 @@ package com.mulecode.jwtserver.flow;
 
 import com.mulecode.jwtserver.client.ClientDetailsCheckerService;
 import com.mulecode.jwtserver.client.ClientDetailsService;
+import com.mulecode.jwtserver.client.model.ClientDetails;
 import com.mulecode.jwtserver.token.TokenService;
 import com.mulecode.jwtserver.token.model.Token;
 import com.mulecode.jwtserver.parser.TokenParser;
@@ -90,6 +91,11 @@ public class RefreshFlowService implements FlowService {
                 publicClamsCopied
         );
 
+        storeToken(
+                clientLoaded,
+                token
+        );
+
         tokenStore.remove(accessTokenId);
         tokenStore.remove(refreshTokenId);
 
@@ -104,5 +110,28 @@ public class RefreshFlowService implements FlowService {
         var newAccessTokenParsed = JwtTokenUtils.parseToMap(token.getAccessToken());
 
         return JwtTokenUtils.extractPrivateClams(newAccessTokenParsed);
+    }
+
+    private void storeToken(ClientDetails loadedClient, Token token) {
+
+        if (loadedClient.invalidateOnReauthorization()) {
+            tokenStore.removeAllByClientId(
+                    loadedClient.getClientId()
+            );
+        }
+
+        tokenStore.store(
+                token.getAccessTokenId(),
+                loadedClient.getClientId(),
+                token.getAccessTokenExpiresAt(),
+                token.getAccessToken()
+        );
+
+        tokenStore.store(
+                token.getRefreshTokenId(),
+                loadedClient.getClientId(),
+                token.getRefreshTokenExpiresAt(),
+                token.getRefreshToken()
+        );
     }
 }
