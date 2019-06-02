@@ -164,21 +164,28 @@ This framework accepts custom grant_types implementations
 Request token - password flow
 ```bash
 curl -X POST \
-  http://<SERVER>:<PORT>/oauth/token \
+  http://<server>:<port>/auth-server/oauth/token \
   -H 'Authorization: Basic YWNtZTphY21lc2VjcmV0' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Content-Type: application/json' \
   -H 'cache-control: no-cache' \
-  -d 'username=root&password=root&grant_type=password'
+  -d '{
+	"username" : "root",
+	"password" : "root",
+	"grant_type" : "password"
+}'
 ```
 Request token - refresh_token flow
 
 ```bash
 curl -X POST \
-  http://<SERVER>:<PORT>/oauth/token \
+  http://<server>:<port>/auth-server/oauth/token \
   -H 'Authorization: Basic YWNtZTphY21lc2VjcmV0' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Content-Type: application/json' \
   -H 'cache-control: no-cache' \
-  -d 'grant_type=refresh_token&grant_type=<REFRESH_TOKEN_HERE>'
+  -d '{
+	"refresh_token" : "<REFRESH_TOKEN_HERE>",
+	"grant_type" : "refresh_token"
+}'
 ```
 
 Response Sample:

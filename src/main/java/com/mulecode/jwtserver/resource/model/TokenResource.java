@@ -1,6 +1,5 @@
-package com.mulecode.jwtserver.resource;
+package com.mulecode.jwtserver.resource.model;
 
-import com.mulecode.jwtserver.resource.model.DefaultOauthAuthorizationRequest;
 import com.mulecode.jwtserver.config.JwtServerConfiguration;
 import com.mulecode.jwtserver.utils.BasicAuthenticationService;
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -26,17 +24,13 @@ public class TokenResource {
     static final Logger LOGGER = LoggerFactory.getLogger(TokenResource.class);
 
     public static final String HEADER_AUTHORIZATION = "Authorization";
-    public static final String HEADER_REFRESH_TOKEN = "refresh_token";
-    public static final String FIELD_USERNAME = "username";
-    public static final String FIELD_PASSWORD = "password";
-    public static final String FIELD_GRANT_TYPE = "grant_type";
 
     @Autowired
     private JwtServerConfiguration oauthJwtServerConfiguration;
 
     @PostMapping("/oauth/token")
     public ResponseEntity oauthToken(@RequestHeader HttpHeaders headers,
-                                     @RequestBody MultiValueMap<String, Object> requestBody) throws Exception {
+                                     @RequestBody TokenBodyRequest requestBody) throws Exception {
 
         LOGGER.debug("Headers: {}", headers);
         LOGGER.debug("Body: {}", requestBody);
@@ -49,35 +43,11 @@ public class TokenResource {
                     return auth;
                 }).orElse(new BasicAuthenticationService());
 
-        var refreshToken = requestBody.getOrDefault(HEADER_REFRESH_TOKEN, List.of())
-                .stream()
-                .findFirst()
-                .map(Object::toString)
-                .orElse(null);
-
-        var username = requestBody.getOrDefault(FIELD_USERNAME, List.of())
-                .stream()
-                .findFirst()
-                .map(Object::toString)
-                .orElse(null);
-
-        var password = requestBody.getOrDefault(FIELD_PASSWORD, List.of())
-                .stream()
-                .findFirst()
-                .map(Object::toString)
-                .orElse(null);
-
-        var grantType = requestBody.getOrDefault(FIELD_GRANT_TYPE, List.of())
-                .stream()
-                .findFirst()
-                .map(Object::toString)
-                .orElse(null);
-
         var tokenRequest = new DefaultOauthAuthorizationRequest();
-        tokenRequest.setGrantType(grantType);
-        tokenRequest.setUserPassword(password);
-        tokenRequest.setUserName(username);
-        tokenRequest.setOauthTokenRefresh(refreshToken);
+        tokenRequest.setGrantType(requestBody.getGrantType());
+        tokenRequest.setUserPassword(requestBody.getPassword());
+        tokenRequest.setUserName(requestBody.getUserName());
+        tokenRequest.setOauthTokenRefresh(requestBody.getRefreshToken());
         tokenRequest.setClientId(basicAuthorization.getUserName());
         tokenRequest.setClientSecret(basicAuthorization.getPassword());
 

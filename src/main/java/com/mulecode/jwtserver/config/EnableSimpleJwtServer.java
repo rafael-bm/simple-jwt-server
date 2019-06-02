@@ -1,6 +1,6 @@
 package com.mulecode.jwtserver.config;
 
-import com.mulecode.jwtserver.resource.TokenResource;
+import com.mulecode.jwtserver.resource.model.TokenResource;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
