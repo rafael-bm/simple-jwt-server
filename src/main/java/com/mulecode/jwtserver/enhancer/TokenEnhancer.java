@@ -9,4 +9,8 @@ public interface TokenEnhancer {
 
     Map<String, Object> enhance(ClientDetails clientDetails, UserDetails userDetails);
 
+    default String getUserIdFieldName() {
+
+        return "user_id";
+    }
 }

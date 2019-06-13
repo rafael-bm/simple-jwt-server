@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class InMemoryTokenDto implements Serializable {
 
     private String id;
-    private String clientId;
+    private String userId;
     private LocalDateTime expiresAt;
     private String value;
 
@@ -18,12 +18,12 @@ public class InMemoryTokenDto implements Serializable {
         this.id = id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getExpiresAt() {
@@ -44,9 +44,9 @@ public class InMemoryTokenDto implements Serializable {
 
     @Override
     public String toString() {
-        return "Token{" +
+        return "InMemoryTokenDto{" +
                 "id='" + id + '\'' +
-                ", clientId='" + clientId + '\'' +
+                ", userId='" + userId + '\'' +
                 ", expiresAt=" + expiresAt +
                 ", value='" + value + '\'' +
                 '}';

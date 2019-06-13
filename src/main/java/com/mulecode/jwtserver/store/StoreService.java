@@ -5,12 +5,12 @@ import java.util.Optional;
 
 public interface StoreService {
 
-    void store(String key, String clientId, LocalDateTime expiresAt, String token);
+    void store(String key, String userId, LocalDateTime expiresAt, String token);
 
     Optional<String> find(String key);
 
     void remove(String key);
 
-    void removeAllByClientId(String clientId);
+    void removeAllByUserIdId(String userId);
 
 }

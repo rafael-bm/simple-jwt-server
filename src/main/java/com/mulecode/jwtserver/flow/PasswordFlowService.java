@@ -81,6 +81,8 @@ public class PasswordFlowService implements FlowService {
                 userLoaded
         );
 
+        var userId = (String) publicClams.get(tokenEnhancer.getUserIdFieldName());
+
         var token = jwtService.create(
                 clientLoaded,
                 publicClams
@@ -88,6 +90,7 @@ public class PasswordFlowService implements FlowService {
 
         storeToken(
                 clientLoaded,
+                userId,
                 token
         );
 
@@ -104,24 +107,24 @@ public class PasswordFlowService implements FlowService {
         return JwtTokenUtils.extractPrivateClams(newAccessTokenParsed);
     }
 
-    private void storeToken(ClientDetails loadedClient, Token token) {
+    private void storeToken(ClientDetails loadedClient, String userId, Token token) {
 
         if (loadedClient.invalidateOnReauthorization()) {
-            tokenStore.removeAllByClientId(
-                    loadedClient.getClientId()
+            tokenStore.removeAllByUserIdId(
+                    userId
             );
         }
 
         tokenStore.store(
                 token.getAccessTokenId(),
-                loadedClient.getClientId(),
+                userId,
                 token.getAccessTokenExpiresAt(),
                 token.getAccessToken()
         );
 
         tokenStore.store(
                 token.getRefreshTokenId(),
-                loadedClient.getClientId(),
+                userId,
                 token.getRefreshTokenExpiresAt(),
                 token.getRefreshToken()
         );

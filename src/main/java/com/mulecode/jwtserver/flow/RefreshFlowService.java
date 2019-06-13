@@ -3,6 +3,7 @@ package com.mulecode.jwtserver.flow;
 import com.mulecode.jwtserver.client.ClientDetailsCheckerService;
 import com.mulecode.jwtserver.client.ClientDetailsService;
 import com.mulecode.jwtserver.client.model.ClientDetails;
+import com.mulecode.jwtserver.enhancer.TokenEnhancer;
 import com.mulecode.jwtserver.token.TokenService;
 import com.mulecode.jwtserver.token.model.Token;
 import com.mulecode.jwtserver.parser.TokenParser;
@@ -29,6 +30,10 @@ public class RefreshFlowService implements FlowService {
     @Autowired
     @Qualifier("clientDetailsCheckerService")
     private ClientDetailsCheckerService clientDetailsCheckerService;
+
+    @Autowired
+    @Qualifier("tokenEnhancer")
+    private TokenEnhancer tokenEnhancer;
 
     @Autowired
     @Qualifier("jwtService")
@@ -64,6 +69,8 @@ public class RefreshFlowService implements FlowService {
                 tokenRequest.getOauthTokenRefresh()
         );
 
+        var userId = (String) refreshTokenParsed.get(tokenEnhancer.getUserIdFieldName());
+
         var refreshTokenId = (String) refreshTokenParsed.get("jti");
 
         var accessTokenId = (String) refreshTokenParsed.get("ati");
@@ -93,6 +100,7 @@ public class RefreshFlowService implements FlowService {
 
         storeToken(
                 clientLoaded,
+                userId,
                 token
         );
 
@@ -112,24 +120,24 @@ public class RefreshFlowService implements FlowService {
         return JwtTokenUtils.extractPrivateClams(newAccessTokenParsed);
     }
 
-    private void storeToken(ClientDetails loadedClient, Token token) {
+    private void storeToken(ClientDetails loadedClient, String userId, Token token) {
 
         if (loadedClient.invalidateOnReauthorization()) {
-            tokenStore.removeAllByClientId(
-                    loadedClient.getClientId()
+            tokenStore.removeAllByUserIdId(
+                    userId
             );
         }
 
         tokenStore.store(
                 token.getAccessTokenId(),
-                loadedClient.getClientId(),
+                userId,
                 token.getAccessTokenExpiresAt(),
                 token.getAccessToken()
         );
 
         tokenStore.store(
                 token.getRefreshTokenId(),
-                loadedClient.getClientId(),
+                userId,
                 token.getRefreshTokenExpiresAt(),
                 token.getRefreshToken()
         );

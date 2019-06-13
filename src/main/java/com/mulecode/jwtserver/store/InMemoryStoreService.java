@@ -17,11 +17,11 @@ public class InMemoryStoreService implements StoreService {
     private Set<InMemoryTokenDto> storeSync = Collections.synchronizedSet(store);
 
     @Override
-    public void store(String key, String clientId, LocalDateTime expiresAt, String value) {
+    public void store(String key, String userId, LocalDateTime expiresAt, String value) {
 
         var token = new InMemoryTokenDto();
         token.setId(key);
-        token.setClientId(clientId);
+        token.setUserId(userId);
         token.setExpiresAt(expiresAt);
         token.setValue(value);
 
@@ -51,10 +51,10 @@ public class InMemoryStoreService implements StoreService {
     }
 
     @Override
-    public void removeAllByClientId(String clientId) {
+    public void removeAllByUserIdId(String userId) {
 
-        LOGGER.debug("removeAllByClientId - clientId: {}", clientId);
+        LOGGER.debug("removeAllByUserIdId - userId: {}", userId);
 
-        storeSync.removeIf(token -> token.getClientId().equalsIgnoreCase(clientId));
+        storeSync.removeIf(token -> token.getUserId().equalsIgnoreCase(userId));
     }
 }

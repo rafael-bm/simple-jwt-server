@@ -12,7 +12,7 @@ public class DefaultTokenEnhancer implements TokenEnhancer {
 
         var enhancements = new HashMap<>(clientDetails.getAdditionalInformation());
         enhancements.putAll(userDetails.getAdditionalInformation());
-        enhancements.put("user_id", userDetails.getUserId());
+        enhancements.put(getUserIdFieldName(), userDetails.getUserId());
         enhancements.put("user_name", userDetails.getUserName());
         enhancements.put("authorities", userDetails.getAuthorities());
 
