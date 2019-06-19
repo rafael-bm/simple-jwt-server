@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
+import static java.util.Objects.isNull;
+
 public class DefaultClientDetailsService implements ClientDetailsService {
 
     static final Logger LOGGER = LoggerFactory.getLogger(DefaultClientDetailsService.class);
@@ -17,20 +19,23 @@ public class DefaultClientDetailsService implements ClientDetailsService {
     private ClientProperties clientProperties;
 
     @Override
-    public ClientDetails loadClientByClientId(String clientName) throws ClientRegistrationException {
+    public ClientDetails loadClientByClientId(String clientName) {
 
         if (clientProperties.getClients().isEmpty()) {
 
-            throw new ClientRegistrationException("No clients registered for this server.");
+            return null;
         }
 
         var clientFound = clientProperties.getClients()
                 .stream()
                 .filter(clientConfig -> clientConfig.getClientName().equalsIgnoreCase(clientName))
                 .findFirst()
-                .orElseThrow(() ->
-                        new ClientRegistrationException("Client not registered for this server.")
-                );
+                .orElse(null);
+
+        if (isNull(clientFound)) {
+
+            return null;
+        }
 
         var client = new BaseClientDetails();
 

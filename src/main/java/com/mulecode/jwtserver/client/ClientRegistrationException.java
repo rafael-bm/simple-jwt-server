@@ -1,6 +1,6 @@
 package com.mulecode.jwtserver.client;
 
-public class ClientRegistrationException extends RuntimeException {
+public class ClientRegistrationException extends Exception {
 
     public ClientRegistrationException(String message) {
         super(message);

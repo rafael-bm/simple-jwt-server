@@ -74,16 +74,14 @@ public class RsaKeyUtils {
 
     public Boolean isPair(final PublicKey publicKey, final PrivateKey privateKey) throws Exception {
 
-        Objects.requireNonNull(publicKey,"publicKey should not be null.");
-        Objects.requireNonNull(privateKey,"privateKey should not be null.");
+        Objects.requireNonNull(publicKey, "publicKey should not be null.");
+        Objects.requireNonNull(privateKey, "privateKey should not be null.");
 
         String file = "qwerty";
         byte[] fileBytes = file.getBytes();
         byte[] digitalSignature = signData(fileBytes, privateKey);
 
-        Boolean verified = verifySig(fileBytes, publicKey, digitalSignature);
-
-        return verified;
+        return verifySig(fileBytes, publicKey, digitalSignature);
     }
 
     private static byte[] signData(byte[] data, PrivateKey privateKey) throws Exception {

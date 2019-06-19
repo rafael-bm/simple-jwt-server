@@ -1,6 +1,8 @@
 package com.mulecode.jwtserver.token;
 
 import com.mulecode.jwtserver.client.model.ClientDetails;
+import com.mulecode.jwtserver.event.JwtServerEventPublisher;
+import com.mulecode.jwtserver.event.JwtServerEventType;
 import com.mulecode.jwtserver.token.model.BaseToken;
 import com.mulecode.jwtserver.token.model.Token;
 import com.mulecode.jwtserver.utils.JwtTokenUtils;
@@ -8,6 +10,7 @@ import com.mulecode.jwtserver.utils.RsaKeyUtils;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -16,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class DefaultTokenService implements TokenService {
+
+    @Autowired
+    private JwtServerEventPublisher eventPublisher;
 
     @Override
     public Token create(ClientDetails clientDetails,
@@ -89,6 +95,11 @@ public class DefaultTokenService implements TokenService {
 
             if (!isMacSignValid) {
 
+                eventPublisher.publishClientEvent(
+                        JwtServerEventType.CLIENT_INVALID_REFRESH_TOKEN,
+                        clientDetails.getClientId()
+                );
+
                 throw new Exception("Token signature not valid");
             }
 
@@ -104,6 +115,11 @@ public class DefaultTokenService implements TokenService {
             );
 
             if (!isRsaSignValid) {
+
+                eventPublisher.publishClientEvent(
+                        JwtServerEventType.CLIENT_INVALID_REFRESH_TOKEN,
+                        clientDetails.getClientId()
+                );
 
                 throw new Exception("Token signature not valid");
             }

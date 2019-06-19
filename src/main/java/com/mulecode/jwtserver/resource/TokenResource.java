@@ -1,6 +1,8 @@
-package com.mulecode.jwtserver.resource.model;
+package com.mulecode.jwtserver.resource;
 
 import com.mulecode.jwtserver.config.JwtServerConfiguration;
+import com.mulecode.jwtserver.resource.model.DefaultOauthAuthorizationRequest;
+import com.mulecode.jwtserver.resource.model.TokenBodyRequest;
 import com.mulecode.jwtserver.utils.BasicAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

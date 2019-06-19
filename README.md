@@ -158,6 +158,56 @@ Core implementation for grant type refresh_token
 This framework accepts custom grant_types implementations
 ```
 
+## Event bus
+This framework uses spring event:
+
+- CREDENTIAL_SUCCESS_AUTHENTICATION
+- CREDENTIAL_SUCCESS_REFRESH
+- CREDENTIAL_DISABLED
+- CREDENTIAL_EXPIRED
+- CREDENTIAL_LOCKED
+- CREDENTIAL_NOT_FOUND
+- CREDENTIAL_INVALID_PASSWORD
+- CLIENT_NOT_FOUND
+- CLIENT_INVALID_SECRET
+- CLIENT_INVALID_REFRESH_TOKEN
+- CLIENT_REFRESH_TOKEN_NOT_FOUND
+
+*How to enable*
+
+on your application.yaml
+
+```yaml
+spring:
+  jwtserver:
+    eventBus:
+      enabled: true
+```
+*How to use*
+
+Create a class annotated with @Component or @Service and add the following method:
+
+```java
+@Component
+public class MulecodeEvents {
+    
+    @Async
+    @EventListener
+    public void handleContextStart(JwtServerEvent event) {
+    
+        // handles the events here
+        LOGGER.info("Event: type: {}, Message: {}",
+                event.getEventType(),
+                event.getMessage()
+        );
+    
+    }
+}
+```
+Note:
+```
+Use @Async to nonBlocking code for events
+```
 
 ## Testing
 

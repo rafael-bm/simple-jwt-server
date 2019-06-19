@@ -5,6 +5,6 @@ import com.mulecode.jwtserver.user.model.UserDetails;
 
 public interface UserDetailsService {
 
-    UserDetails loadUser(AuthorizarionRequest request) throws UserDetailsException;
+    UserDetails loadUser(AuthorizarionRequest request);
 
 }

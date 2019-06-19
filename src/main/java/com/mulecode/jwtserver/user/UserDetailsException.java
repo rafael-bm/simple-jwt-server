@@ -1,6 +1,6 @@
 package com.mulecode.jwtserver.user;
 
-public class UserDetailsException extends RuntimeException {
+public class UserDetailsException extends Exception {
 
     public UserDetailsException(String message) {
         super(message);

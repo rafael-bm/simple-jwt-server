@@ -5,6 +5,6 @@ import com.mulecode.jwtserver.resource.model.AuthorizarionRequest;
 
 public interface ClientDetailsCheckerService {
 
-    Boolean validate(AuthorizarionRequest tokenRequest, ClientDetails clientDetails) throws ClientRegistrationException;
+    void validate(AuthorizarionRequest tokenRequest, ClientDetails clientDetails) throws ClientRegistrationException;
 
 }

@@ -45,6 +45,9 @@ dependencyManagement {
 }
 
 dependencies {
+
+    implementation("io.reactivex:rxjava:1.3.8")
+    
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
 

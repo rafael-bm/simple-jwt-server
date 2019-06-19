@@ -4,14 +4,15 @@ import com.mulecode.jwtserver.client.ClientDetailsCheckerService;
 import com.mulecode.jwtserver.client.ClientDetailsService;
 import com.mulecode.jwtserver.client.model.ClientDetails;
 import com.mulecode.jwtserver.enhancer.TokenEnhancer;
-import com.mulecode.jwtserver.token.TokenService;
-import com.mulecode.jwtserver.token.model.Token;
+import com.mulecode.jwtserver.event.JwtServerEventPublisher;
+import com.mulecode.jwtserver.event.JwtServerEventType;
 import com.mulecode.jwtserver.parser.TokenParser;
 import com.mulecode.jwtserver.resource.model.AuthorizarionRequest;
 import com.mulecode.jwtserver.store.StoreService;
+import com.mulecode.jwtserver.token.TokenService;
+import com.mulecode.jwtserver.token.model.Token;
 import com.mulecode.jwtserver.user.UserDetailsCheckerService;
 import com.mulecode.jwtserver.user.UserDetailsService;
-import com.mulecode.jwtserver.utils.JwtTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class PasswordFlowService implements FlowService {
     @Autowired
     @Qualifier("tokenParser")
     private TokenParser tokenParser;
+
+    @Autowired
+    private JwtServerEventPublisher eventPublisher;
 
     @Override
     public String name() {
@@ -94,17 +98,17 @@ public class PasswordFlowService implements FlowService {
                 token
         );
 
-        return tokenParser.parse(
+        var tokenResponse = tokenParser.parse(
                 clientLoaded,
                 token
         );
-    }
 
-    private Map<String, Object> extractPrivateClams(Token token) throws Exception {
+        eventPublisher.publishClientEvent(
+                JwtServerEventType.CREDENTIAL_SUCCESS_AUTHENTICATION,
+                tokenRequest.getUserName()
+        );
 
-        var newAccessTokenParsed = JwtTokenUtils.parseToMap(token.getAccessToken());
-
-        return JwtTokenUtils.extractPrivateClams(newAccessTokenParsed);
+        return tokenResponse;
     }
 
     private void storeToken(ClientDetails loadedClient, String userId, Token token) {

@@ -17,11 +17,11 @@ public class DefaultUserDetailsService implements UserDetailsService {
     PasswordEncoder userPasswordEncoder;
 
     @Override
-    public UserDetails loadUser(AuthorizarionRequest request) throws UserDetailsException {
+    public UserDetails loadUser(AuthorizarionRequest request) {
 
         if (!request.getUserName().equalsIgnoreCase("root")) {
 
-            throw new UserDetailsException("Invalid username or password.");
+            return null;
         }
 
         var user = new BaseUserDetails();

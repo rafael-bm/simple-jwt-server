@@ -4,6 +4,6 @@ import com.mulecode.jwtserver.client.model.ClientDetails;
 
 public interface ClientDetailsService {
 
-    ClientDetails loadClientByClientId(String clientName) throws ClientRegistrationException;
+    ClientDetails loadClientByClientId(String clientName);
 
 }
