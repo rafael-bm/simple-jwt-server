@@ -39,6 +39,7 @@ public class DefaultUserDetailsCheckerService implements UserDetailsCheckerServi
 
             eventPublisher.publishClientEvent(
                     JwtServerEventType.CREDENTIAL_DISABLED,
+                    tokenRequest.getClientId(),
                     tokenRequest.getUserName()
             );
 
@@ -49,6 +50,7 @@ public class DefaultUserDetailsCheckerService implements UserDetailsCheckerServi
 
             eventPublisher.publishClientEvent(
                     JwtServerEventType.CREDENTIAL_EXPIRED,
+                    tokenRequest.getClientId(),
                     tokenRequest.getUserName()
             );
 
@@ -59,6 +61,7 @@ public class DefaultUserDetailsCheckerService implements UserDetailsCheckerServi
 
             eventPublisher.publishClientEvent(
                     JwtServerEventType.CREDENTIAL_LOCKED,
+                    tokenRequest.getClientId(),
                     tokenRequest.getUserName()
             );
 
@@ -69,6 +72,7 @@ public class DefaultUserDetailsCheckerService implements UserDetailsCheckerServi
 
             eventPublisher.publishClientEvent(
                     JwtServerEventType.CREDENTIAL_INVALID_PASSWORD,
+                    tokenRequest.getClientId(),
                     tokenRequest.getUserName()
             );
 

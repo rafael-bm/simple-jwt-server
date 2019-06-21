@@ -105,6 +105,7 @@ public class PasswordFlowService implements FlowService {
 
         eventPublisher.publishClientEvent(
                 JwtServerEventType.CREDENTIAL_SUCCESS_AUTHENTICATION,
+                tokenRequest.getClientId(),
                 tokenRequest.getUserName()
         );
 

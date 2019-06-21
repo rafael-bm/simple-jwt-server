@@ -131,6 +131,7 @@ public class RefreshFlowService implements FlowService {
 
         eventPublisher.publishClientEvent(
                 JwtServerEventType.CREDENTIAL_SUCCESS_REFRESH,
+                tokenRequest.getClientId(),
                 tokenRequest.getUserName()
         );
 

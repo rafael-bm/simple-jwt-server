@@ -14,7 +14,12 @@ public class JwtServerEventPublisher {
     @Autowired
     Environment environment;
 
-    public void publishClientEvent(JwtServerEventType eventType, String message) {
+    public void publishClientEvent(JwtServerEventType eventType, String clientName) {
+
+        publishClientEvent(eventType, clientName, null);
+    }
+
+    public void publishClientEvent(JwtServerEventType eventType, String clientName, String credentialName) {
 
         var eventBusEnabled = environment.getProperty(
                 "spring.jwtserver.eventBus.enabled",
@@ -29,7 +34,8 @@ public class JwtServerEventPublisher {
         var event = new JwtServerEvent(
                 this,
                 eventType,
-                message
+                clientName,
+                credentialName
         );
 
         applicationEventPublisher.publishEvent(event);

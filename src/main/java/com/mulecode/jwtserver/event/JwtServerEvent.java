@@ -5,16 +5,22 @@ import org.springframework.context.ApplicationEvent;
 public class JwtServerEvent extends ApplicationEvent {
 
     private JwtServerEventType eventType;
-    private String message;
+    private String clientName;
+    private String credentialName;
 
-    public JwtServerEvent(Object source, JwtServerEventType eventType, String message) {
+    public JwtServerEvent(Object source, JwtServerEventType eventType, String clientName, String credentialName) {
         super(source);
-        this.message = message;
+        this.clientName = clientName;
+        this.credentialName = credentialName;
         this.eventType = eventType;
     }
 
-    public String getMessage() {
-        return message;
+    public String getClientName() {
+        return clientName;
+    }
+
+    public String getCredentialName() {
+        return credentialName;
     }
 
     public JwtServerEventType getEventType() {
