@@ -74,8 +74,6 @@ public class RefreshFlowService implements FlowService {
                 tokenRequest.getOauthTokenRefresh()
         );
 
-        var userId = (String) refreshTokenParsed.get(tokenEnhancer.getUserIdFieldName());
-
         var refreshTokenId = (String) refreshTokenParsed.get("jti");
 
         var accessTokenId = (String) refreshTokenParsed.get("ati");
@@ -106,6 +104,10 @@ public class RefreshFlowService implements FlowService {
 
         var accessTokenParsed = JwtTokenUtils.parseToMap(
                 accessTokenFound.get()
+        );
+
+        var userId = (String) accessTokenParsed.get(
+                tokenEnhancer.getUserIdFieldName()
         );
 
         var publicClamsCopied = JwtTokenUtils.extractPublicClams(accessTokenParsed);
